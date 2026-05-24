@@ -1,0 +1,1 @@
+## RUN pytest backend/RAG/tests/ -v to test all RAG files
