@@ -19,6 +19,7 @@ import {
   Layers,
   Activity,
 } from "lucide-react";
+import DarkSelect from "../components/common/DarkSelect";
 
 const initialReports = [
   {
@@ -534,24 +535,7 @@ export default function Reports() {
   );
 }
 
-function DarkSelect({ icon, value, onChange, options }) {
-  return (
-    <div className="flex w-full items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 px-2.5 py-2 sm:w-auto">
-      {icon}
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full cursor-pointer appearance-none bg-slate-950 font-mono text-[11px] font-bold uppercase text-slate-300 outline-none sm:w-auto"
-      >
-        {options.map((option) => (
-          <option key={option} value={option} className="bg-slate-950 text-slate-300">
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
+
 
 function IconButton({ icon: Icon, onClick, cyan, green, purple, disabled }) {
   const color = cyan

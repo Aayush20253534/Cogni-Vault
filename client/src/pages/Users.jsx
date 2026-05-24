@@ -20,6 +20,7 @@ import {
   Activity,
   AlertTriangle,
 } from "lucide-react";
+import DarkSelect from "../components/common/DarkSelect";
 
 const usersMockData = [
   {
@@ -366,55 +367,29 @@ export default function Users() {
         </div>
 
         <div className="flex w-full flex-wrap items-center gap-2.5 lg:w-auto">
-          <div className="flex w-full items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 px-2.5 py-2 sm:w-auto">
-            <Filter className="h-3 w-3 shrink-0 text-slate-500" />
-            <select
+          <DarkSelect
+  icon={<Filter className="h-3 w-3 text-slate-500" />}
   value={riskFilter}
-  onChange={(e) => setRiskFilter(e.target.value)}
-  className="w-full cursor-pointer appearance-none bg-slate-950 text-[11px] font-bold uppercase text-slate-300 outline-none sm:w-auto"
->
-  <option className="bg-slate-950 text-slate-300" value="All">
-    All Risk
-  </option>
+  onChange={setRiskFilter}
+  options={[
+    "All",
+    "High Risk",
+    "Medium Risk",
+    "Low Risk",
+  ]}
+/>
 
-  <option className="bg-slate-950 text-slate-300" value="High Risk">
-    High Risk
-  </option>
-
-  <option className="bg-slate-950 text-slate-300" value="Medium Risk">
-    Medium Risk
-  </option>
-
-  <option className="bg-slate-950 text-slate-300" value="Low Risk">
-    Low Risk
-  </option>
-</select>
-          </div>
-
-          <div className="flex w-full items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 px-2.5 py-2 sm:w-auto">
-            <Activity className="h-3 w-3 shrink-0 text-slate-500" />
-            <select
+         <DarkSelect
+  icon={<Activity className="h-3 w-3 text-slate-500" />}
   value={statusFilter}
-  onChange={(e) => setStatusFilter(e.target.value)}
-  className="w-full cursor-pointer appearance-none bg-slate-950 text-[11px] font-bold uppercase text-slate-300 outline-none sm:w-auto"
->
-  <option className="bg-slate-950 text-slate-300" value="All">
-    All Status
-  </option>
-
-  <option className="bg-slate-950 text-slate-300" value="Active">
-    Active
-  </option>
-
-  <option className="bg-slate-950 text-slate-300" value="Under Review">
-    Under Review
-  </option>
-
-  <option className="bg-slate-950 text-slate-300" value="Restricted">
-    Restricted
-  </option>
-</select>
-          </div>
+  onChange={setStatusFilter}
+  options={[
+    "All",
+    "Active",
+    "Under Review",
+    "Restricted",
+  ]}
+/>
 
           <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900 px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-400 transition hover:border-cyan-500/30 hover:text-cyan-300 sm:w-auto">
             <Download className="h-3.5 w-3.5" />
