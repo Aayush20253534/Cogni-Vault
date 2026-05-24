@@ -9,7 +9,6 @@ import {
   Filter,
   Download,
   Snowflake,
-  X,
   Terminal,
   MapPin,
   Laptop,
@@ -23,6 +22,8 @@ import {
 import DarkSelect from "../components/common/DarkSelect";
 import ActionButton from "../components/common/ActionButton";
 import InfoRow from "../components/common/InfoRow";
+import DrawerShell from "../components/common/DrawerShell";
+import InfoPanel from "../components/common/InfoPanel";
 
 const usersMockData = [
   {
@@ -543,162 +544,94 @@ export default function Users() {
 
       <AnimatePresence>
         {selectedUser && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedUser(null)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            />
+         <>
+         <DrawerShell
+  title="User Intelligence Payload"
+  icon={Fingerprint}
+  accent="cyan"
+  onClose={() => setSelectedUser(null)}
+  maxWidth="max-w-[480px]"
+  footer={
+    <div className="flex items-center gap-2">
+      <button className="flex-1 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition hover:bg-slate-800">
+        Step-Up Auth
+      </button>
 
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 220 }}
-              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-[480px] flex-col overflow-y-auto border-l border-slate-800 bg-slate-950/95 p-5 font-mono text-xs text-slate-300 shadow-[0_0_50px_rgba(0,0,0,0.85)] lg:p-6"
-            >
-              <div className="mb-5 flex shrink-0 items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-2">
-                  <Fingerprint className="h-4 w-4 text-cyan-300" />
-                  <span className="text-xs font-black uppercase tracking-widest text-slate-200">
-                    User Intelligence Payload
-                  </span>
-                </div>
+      <button className="flex-1 rounded-xl border border-cyan-500/20 bg-cyan-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-cyan-300 transition hover:border-cyan-500/40 hover:bg-cyan-900/40">
+        Clear Status
+      </button>
+    </div>
+  }
+>
+  <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
+    <div className="absolute right-4 top-4 rounded border border-cyan-500/10 bg-cyan-500/10 px-2 py-1 text-[9px] font-black tracking-wider text-cyan-300">
+      {selectedUser.id}
+    </div>
 
-                <button
-                  onClick={() => setSelectedUser(null)}
-                  className="rounded-lg border border-slate-800 bg-slate-900/70 p-1 text-slate-500 transition hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+    <h3 className="pr-20 text-base font-black uppercase tracking-wide text-white">
+      {selectedUser.name}
+    </h3>
 
-              <div className="flex-1 space-y-5">
-                <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
-                  <div className="absolute right-4 top-4 rounded border border-cyan-500/10 bg-cyan-500/10 px-2 py-1 text-[9px] font-black tracking-wider text-cyan-300">
-                    {selectedUser.id}
-                  </div>
+    <p className="mt-1 text-[10px] lowercase text-slate-500">
+      {selectedUser.email}
+    </p>
 
-                  <h3 className="pr-20 text-base font-black uppercase tracking-wide text-white">
-                    {selectedUser.name}
-                  </h3>
+    <div className="mt-4 flex items-center justify-between border-t border-slate-800 pt-3 text-[10px] text-slate-400">
+      <span>ACCOUNT</span>
+      <span className="font-bold text-slate-200">
+        {selectedUser.accountId}
+      </span>
+    </div>
+  </div>
 
-                  <p className="mt-1 text-[10px] lowercase text-slate-500">
-                    {selectedUser.email}
-                  </p>
+  <div className="grid grid-cols-2 gap-3">
+    <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
+        Threat Index
+      </span>
+      <p className={`mt-1.5 text-xl font-black ${getRiskStyles(selectedUser.riskScore).text}`}>
+        {selectedUser.riskScore}%
+      </p>
+    </div>
 
-                  <div className="mt-4 flex items-center justify-between border-t border-slate-800 pt-3 text-[10px] text-slate-400">
-                    <span>ACCOUNT</span>
-                    <span className="font-bold text-slate-200">
-                      {selectedUser.accountId}
-                    </span>
-                  </div>
-                </div>
+    <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
+        Verification
+      </span>
+      <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-slate-200">
+        <CheckCircle className="h-3.5 w-3.5 text-emerald-300" />
+        {selectedUser.verificationState}
+      </div>
+    </div>
+  </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                      Threat Index
-                    </span>
-                    <p
-                      className={`mt-1.5 text-xl font-black ${
-                        getRiskStyles(selectedUser.riskScore).text
-                      }`}
-                    >
-                      {selectedUser.riskScore}%
-                    </p>
-                  </div>
+  <InfoPanel title="AI Diagnosis" icon={AlertTriangle} color="rose">
+    {selectedUser.aiExplanation}
+  </InfoPanel>
 
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                      Verification
-                    </span>
-                    <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold text-slate-200">
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-300" />
-                      {selectedUser.verificationState}
-                    </div>
-                  </div>
-                </div>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <span className="block border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+      Device Telemetry
+    </span>
 
-                <div className="rounded-xl border border-rose-500/10 bg-rose-500/10 p-3.5">
-                  <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-300">
-                    <AlertTriangle className="h-3.5 w-3.5" />
-                    AI Diagnosis
-                  </div>
+    <div className="mt-3 space-y-2 text-[10px]">
+      <InfoRow label="DEVICE" value={selectedUser.device} />
+      <InfoRow label="FINGERPRINT" value={selectedUser.fingerprint} cyan />
+      <InfoRow label="LOCATION" value={selectedUser.location} />
+    </div>
+  </div>
 
-                  <p className="text-[11px] leading-relaxed text-slate-400">
-                    {selectedUser.aiExplanation}
-                  </p>
-                </div>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">
+      Behavior Notes
+    </span>
 
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <span className="block border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Device Telemetry
-                  </span>
-
-                  <div className="mt-3 space-y-2 text-[10px]">
-                    <InfoRow label="DEVICE" value={selectedUser.device} />
-                    <InfoRow label="FINGERPRINT" value={selectedUser.fingerprint} cyan />
-                    <InfoRow label="LOCATION" value={selectedUser.location} />
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Behavior Notes
-                  </span>
-
-                  <p className="mt-2 text-[10px] leading-relaxed text-slate-400">
-                    {selectedUser.behaviorNotes}
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <span className="block border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Recent Timeline
-                  </span>
-
-                  <div className="relative mt-3 space-y-3 pl-1 before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-800">
-                    {[
-                      ["Transaction parameter update pushed", "12s ago"],
-                      ["Device verification challenge dispatched", "4m ago"],
-                      ["Network routing handshake completed", "14m ago"],
-                    ].map(([event, time], index) => (
-                      <div key={event} className="relative flex gap-3 text-[10px]">
-                        <span
-                          className={`z-10 mt-0.5 h-[9px] w-[9px] shrink-0 rounded-full border-2 border-slate-950 ${
-                            index === 0
-                              ? "bg-cyan-400"
-                              : index === 1
-                              ? "bg-slate-600"
-                              : "bg-emerald-400"
-                          }`}
-                        />
-                        <div>
-                          <p className="leading-tight text-slate-400">{event}</p>
-                          <span className="text-[9px] text-slate-600">
-                            {time}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 flex shrink-0 items-center gap-2 border-t border-slate-800 pt-4">
-                <button className="flex-1 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition hover:bg-slate-800">
-                  Step-Up Auth
-                </button>
-
-                <button className="flex-1 rounded-xl border border-cyan-500/20 bg-cyan-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-cyan-300 transition hover:border-cyan-500/40 hover:bg-cyan-900/40">
-                  Clear Status
-                </button>
-              </div>
-            </motion.aside>
-          </>
+    <p className="mt-2 text-[10px] leading-relaxed text-slate-400">
+      {selectedUser.behaviorNotes}
+    </p>
+  </div>
+</DrawerShell>
+         </>
         )}
       </AnimatePresence>
     </motion.div>

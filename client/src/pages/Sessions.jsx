@@ -6,7 +6,6 @@ import {
   Filter,
   SlidersHorizontal,
   FileSpreadsheet,
-  X,
   Laptop,
   MapPin,
   Globe,
@@ -21,7 +20,7 @@ import ActionButton from "../components/common/ActionButton";
 import InfoRow from "../components/common/InfoRow";
 import InfoPanel from "../components/common/InfoPanel";
 import MiniInfo from "../components/common/MiniInfo";
-
+import DrawerShell from "../components/common/DrawerShell";
 
 const sessionMockData = [
   {
@@ -504,118 +503,110 @@ export default function Sessions() {
               className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
             />
 
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 32, stiffness: 260 }}
-              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-[500px] flex-col overflow-y-auto border-l border-slate-800 bg-slate-950/95 p-5 shadow-[0_0_60px_rgba(0,0,0,0.95)] lg:p-6"
-            >
-              <div className="mb-5 flex shrink-0 items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-cyan-300" />
-                  <span className="text-xs font-black uppercase tracking-widest text-slate-200">
-                    Session Forensics
-                  </span>
-                </div>
-                <button
-                  onClick={() => setInspectedSession(null)}
-                  className="rounded-lg border border-slate-800 bg-slate-900/70 p-1 text-slate-500 hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+           <DrawerShell
+  title="Session Forensics"
+  icon={Globe}
+  accent="cyan"
+  onClose={() => setInspectedSession(null)}
+  maxWidth="max-w-[500px]"
+  footer={
+    <div className="flex gap-2">
+      {inspectedSession.sessionState !== "Locked" &&
+        inspectedSession.sessionState !== "Terminated" && (
+          <button
+            onClick={() =>
+              updateSession(inspectedSession.sessionId, {
+                sessionState: "Locked",
+              })
+            }
+            className="flex-1 rounded-xl border border-amber-500/20 bg-amber-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-amber-300"
+          >
+            Lock Session
+          </button>
+        )}
 
-              <div className="flex-1 space-y-5">
-                <DrawerHeader session={inspectedSession} />
+      {inspectedSession.sessionState !== "Terminated" && (
+        <button
+          onClick={() =>
+            updateSession(inspectedSession.sessionId, {
+              sessionState: "Terminated",
+              lastActivity: "Just now",
+            })
+          }
+          className="flex-1 rounded-xl border border-rose-500/20 bg-rose-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-rose-300"
+        >
+          Kill Session
+        </button>
+      )}
+    </div>
+  }
+>
+  <DrawerHeader session={inspectedSession} />
 
-                <div className="grid grid-cols-3 gap-2">
-                  <MiniMetric
-                    label="Score"
-                    value={`${inspectedSession.behaviorScore}%`}
-                    className={
-                      inspectedSession.behaviorScore >= 75
-                        ? "text-rose-300"
-                        : inspectedSession.behaviorScore >= 40
-                        ? "text-amber-300"
-                        : "text-emerald-300"
-                    }
-                  />
-                  <MiniBadge label="Risk" value={inspectedSession.riskLevel} className={RISK_THEMES[inspectedSession.riskLevel]} />
-                  <MiniBadge label="State" value={inspectedSession.sessionState} className={STATE_THEMES[inspectedSession.sessionState]} />
-                </div>
+  <div className="grid grid-cols-3 gap-2">
+    <MiniMetric
+      label="Score"
+      value={`${inspectedSession.behaviorScore}%`}
+      className={
+        inspectedSession.behaviorScore >= 75
+          ? "text-rose-300"
+          : inspectedSession.behaviorScore >= 40
+          ? "text-amber-300"
+          : "text-emerald-300"
+      }
+    />
+    <MiniBadge
+      label="Risk"
+      value={inspectedSession.riskLevel}
+      className={RISK_THEMES[inspectedSession.riskLevel]}
+    />
+    <MiniBadge
+      label="State"
+      value={inspectedSession.sessionState}
+      className={STATE_THEMES[inspectedSession.sessionState]}
+    />
+  </div>
 
-               <InfoPanel title="BehaviorShield Diagnosis" icon={Cpu} color="cyan">
-  {inspectedSession.aiExplanation}
-</InfoPanel>
+  <InfoPanel title="BehaviorShield Diagnosis" icon={Cpu} color="cyan">
+    {inspectedSession.aiExplanation}
+  </InfoPanel>
 
-<InfoPanel title="Flag Reason" icon={Cpu} color="rose">
-  {inspectedSession.anomalyReason}
-</InfoPanel>
+  <InfoPanel title="Flag Reason" icon={Cpu} color="rose">
+    {inspectedSession.anomalyReason}
+  </InfoPanel>
 
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Network Telemetry
-                  </p>
-                  <InfoRow label="IP" value={inspectedSession.ip} />
-                  <InfoRow label="Carrier" value={inspectedSession.networkIntel} />
-                  <InfoRow label="Location" value={inspectedSession.location} cyan />
-                </div>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+      Network Telemetry
+    </p>
+    <InfoRow label="IP" value={inspectedSession.ip} />
+    <InfoRow label="Carrier" value={inspectedSession.networkIntel} />
+    <InfoRow label="Location" value={inspectedSession.location} cyan />
+  </div>
 
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Timeline
-                  </p>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+      Timeline
+    </p>
 
-                  <div className="relative mt-3 space-y-3 pl-1 before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-800">
-                    {inspectedSession.timeline.map(([event, details, time]) => (
-                      <div key={`${event}-${time}`} className="relative flex gap-3 text-[10px]">
-                        <span className="z-10 mt-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-                        <div>
-                          <p className="text-slate-400">
-                            <span className="mr-1 rounded border border-slate-800 bg-slate-900 px-1 text-[9px] font-bold uppercase text-slate-200">
-                              {event}
-                            </span>
-                            {details}
-                          </p>
-                          <span className="text-[9px] text-slate-600">{time}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 flex shrink-0 gap-2 border-t border-slate-800 pt-4">
-                {inspectedSession.sessionState !== "Locked" &&
-                  inspectedSession.sessionState !== "Terminated" && (
-                    <button
-                      onClick={() =>
-                        updateSession(inspectedSession.sessionId, {
-                          sessionState: "Locked",
-                        })
-                      }
-                      className="flex-1 rounded-xl border border-amber-500/20 bg-amber-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-amber-300"
-                    >
-                      Lock Session
-                    </button>
-                  )}
-
-                {inspectedSession.sessionState !== "Terminated" && (
-                  <button
-                    onClick={() =>
-                      updateSession(inspectedSession.sessionId, {
-                        sessionState: "Terminated",
-                        lastActivity: "Just now",
-                      })
-                    }
-                    className="flex-1 rounded-xl border border-rose-500/20 bg-rose-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-rose-300"
-                  >
-                    Kill Session
-                  </button>
-                )}
-              </div>
-            </motion.aside>
+    <div className="relative mt-3 space-y-3 pl-1 before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-800">
+      {inspectedSession.timeline.map(([event, details, time]) => (
+        <div key={`${event}-${time}`} className="relative flex gap-3 text-[10px]">
+          <span className="z-10 mt-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+          <div>
+            <p className="text-slate-400">
+              <span className="mr-1 rounded border border-slate-800 bg-slate-900 px-1 text-[9px] font-bold uppercase text-slate-200">
+                {event}
+              </span>
+              {details}
+            </p>
+            <span className="text-[9px] text-slate-600">{time}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</DrawerShell>
           </>
         )}
       </AnimatePresence>

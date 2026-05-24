@@ -11,7 +11,6 @@ import {
   Eye,
   Archive,
   RefreshCw,
-  X,
   Cpu,
   Calendar,
   User,
@@ -23,6 +22,7 @@ import DarkSelect from "../components/common/DarkSelect";
 import IconButton from "../components/common/IconButton";
 import InfoPanel from "../components/common/InfoPanel";
 import MiniBox from "../components/common/MiniBox";
+import DrawerShell from "../components/common/DrawerShell";
 
 const initialReports = [
   {
@@ -406,132 +406,109 @@ export default function Reports() {
 
       <AnimatePresence>
         {selectedReport && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedReport(null)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            />
+         <>
+         <DrawerShell
+  title="Report Intelligence"
+  icon={FileText}
+  accent="cyan"
+  onClose={() => setSelectedReport(null)}
+  maxWidth="max-w-[520px]"
+  footer={
+    <div className="grid grid-cols-2 gap-3">
+      <button
+        onClick={() => downloadReport(selectedReport.title)}
+        className="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-xs font-bold text-slate-300 hover:bg-slate-800"
+      >
+        <Download className="h-3.5 w-3.5" />
+        Download
+      </button>
 
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 220 }}
-              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-[520px] flex-col overflow-y-auto border-l border-slate-800 bg-slate-950/95 p-5 shadow-[0_0_60px_rgba(0,0,0,0.95)] lg:p-6"
-            >
-              <div className="mb-5 flex items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-2 font-mono text-xs font-black uppercase tracking-widest text-slate-200">
-                  <FileText className="h-4 w-4 text-cyan-300" />
-                  Report Intelligence
-                </div>
+      <button
+        onClick={() => archiveReport(selectedReport.id)}
+        className="flex items-center justify-center gap-2 rounded-xl border border-purple-500/20 bg-purple-950/40 py-2.5 text-xs font-bold text-purple-300"
+      >
+        <Archive className="h-3.5 w-3.5" />
+        Archive
+      </button>
+    </div>
+  }
+>
+  <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
+    <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-600">
+      {selectedReport.id}
+    </p>
 
-                <button
-                  onClick={() => setSelectedReport(null)}
-                  className="rounded-lg border border-slate-800 bg-slate-900/70 p-1 text-slate-500 hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+    <h2 className="mt-1 text-lg font-black text-white">
+      {selectedReport.title}
+    </h2>
 
-              <div className="space-y-5">
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-600">
-                    {selectedReport.id}
-                  </p>
+    <div className="mt-3 flex flex-wrap gap-2">
+      <span className={`rounded-lg border px-2 py-1 text-[9px] font-black uppercase ${TYPE_THEMES[selectedReport.type]}`}>
+        {selectedReport.type}
+      </span>
+      <span className={`rounded-lg border px-2 py-1 text-[9px] font-black uppercase ${STATUS_THEMES[selectedReport.status]}`}>
+        {selectedReport.status}
+      </span>
+      <span className="ml-auto flex items-center gap-1 text-[10px] text-slate-500">
+        <Calendar className="h-3 w-3" />
+        {selectedReport.createdAt}
+      </span>
+    </div>
+  </div>
 
-                  <h2 className="mt-1 text-lg font-black text-white">
-                    {selectedReport.title}
-                  </h2>
+  <div className="grid grid-cols-2 gap-3">
+    <MiniBox
+      label="Protected Value"
+      value={selectedReport.fraudValue === "₹0" ? "Audit Only" : selectedReport.fraudValue}
+      danger={selectedReport.fraudValue !== "₹0"}
+    />
+    <MiniBox label="Authority" value={selectedReport.generatedBy} />
+  </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <span className={`rounded-lg border px-2 py-1 text-[9px] font-black uppercase ${TYPE_THEMES[selectedReport.type]}`}>
-                      {selectedReport.type}
-                    </span>
-                    <span className={`rounded-lg border px-2 py-1 text-[9px] font-black uppercase ${STATUS_THEMES[selectedReport.status]}`}>
-                      {selectedReport.status}
-                    </span>
-                    <span className="ml-auto flex items-center gap-1 text-[10px] text-slate-500">
-                      <Calendar className="h-3 w-3" />
-                      {selectedReport.createdAt}
-                    </span>
-                  </div>
-                </div>
+  <InfoPanel title="AI Diagnostic" icon={Cpu} color="cyan">
+    {selectedReport.aiSummary}
+  </InfoPanel>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <MiniBox
-                    label="Protected Value"
-                    value={selectedReport.fraudValue === "₹0" ? "Audit Only" : selectedReport.fraudValue}
-                    danger={selectedReport.fraudValue !== "₹0"}
-                  />
-                  <MiniBox label="Authority" value={selectedReport.generatedBy} />
-                </div>
+  <InfoPanel title="Key Findings" icon={AlertTriangle} color="rose">
+    {selectedReport.keyFindings}
+  </InfoPanel>
 
-                <InfoPanel title="AI Diagnostic" icon={Cpu} color="cyan">
-                  {selectedReport.aiSummary}
-                </InfoPanel>
+  <div className="rounded-xl border border-purple-500/10 bg-purple-500/10 p-3.5">
+    <div className="mb-2 flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-purple-300">
+      <Layers className="h-3.5 w-3.5" />
+      Included Modules
+    </div>
 
-                <InfoPanel title="Key Findings" icon={AlertTriangle} color="rose">
-                  {selectedReport.keyFindings}
-                </InfoPanel>
+    <div className="flex flex-wrap gap-1.5">
+      {selectedReport.modules.map((module) => (
+        <span
+          key={module}
+          className="rounded-lg border border-purple-500/20 bg-slate-950/50 px-2 py-1 font-mono text-[10px] text-purple-300"
+        >
+          {module}
+        </span>
+      ))}
+    </div>
+  </div>
 
-                <div className="rounded-xl border border-purple-500/10 bg-purple-500/10 p-3.5">
-                  <div className="mb-2 flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-purple-300">
-                    <Layers className="h-3.5 w-3.5" />
-                    Included Modules
-                  </div>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <div className="mb-3 flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-slate-400">
+      <Activity className="h-3.5 w-3.5" />
+      Audit Timeline
+    </div>
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedReport.modules.map((module) => (
-                      <span
-                        key={module}
-                        className="rounded-lg border border-purple-500/20 bg-slate-950/50 px-2 py-1 font-mono text-[10px] text-purple-300"
-                      >
-                        {module}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <div className="mb-3 flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-slate-400">
-                    <Activity className="h-3.5 w-3.5" />
-                    Audit Timeline
-                  </div>
-
-                  <div className="relative space-y-3 border-l border-slate-800 pl-4">
-                    {selectedReport.timeline.map(([time, event]) => (
-                      <div key={`${time}-${event}`} className="relative">
-                        <span className="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                        <p className="font-mono text-[9px] text-slate-600">{time}</p>
-                        <p className="text-xs text-slate-300">{event}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3 border-t border-slate-800 pt-4">
-                <button
-                  onClick={() => downloadReport(selectedReport.title)}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-xs font-bold text-slate-300 hover:bg-slate-800"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  Download
-                </button>
-
-                <button
-                  onClick={() => archiveReport(selectedReport.id)}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-purple-500/20 bg-purple-950/40 py-2.5 text-xs font-bold text-purple-300"
-                >
-                  <Archive className="h-3.5 w-3.5" />
-                  Archive
-                </button>
-              </div>
-            </motion.aside>
-          </>
+    <div className="relative space-y-3 border-l border-slate-800 pl-4">
+      {selectedReport.timeline.map(([time, event]) => (
+        <div key={`${time}-${event}`} className="relative">
+          <span className="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+          <p className="font-mono text-[9px] text-slate-600">{time}</p>
+          <p className="text-xs text-slate-300">{event}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</DrawerShell>
+         </>
         )}
       </AnimatePresence>
     </motion.div>

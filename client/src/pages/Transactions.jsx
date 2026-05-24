@@ -6,7 +6,6 @@ import {
   Search,
   Filter,
   Download,
-  X,
   MapPin,
   Clock,
   Cpu,
@@ -19,6 +18,8 @@ import {
 import ActionButton from "../components/common/ActionButton";
 import DarkSelect from "../components/common/DarkSelect";
 import InfoRow from "../components/common/InfoRow";
+import DrawerShell from "../components/common/DrawerShell";
+import InfoPanel from "../components/common/InfoPanel";
 
 const transactionMockData = [
   {
@@ -264,6 +265,7 @@ const itemVariants = {
 export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [decisionFilter, setDecisionFilter] = useState("All");
+  
   const [typeFilter, setTypeFilter] = useState("All");
   const [selectedTxn, setSelectedTxn] = useState(null);
 
@@ -530,149 +532,61 @@ export default function Transactions() {
 
       <AnimatePresence>
         {selectedTxn && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedTxn(null)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            />
+         <>
+         <DrawerShell
+  title="AI Risk Analysis Payload"
+  icon={Fingerprint}
+  accent="cyan"
+  onClose={() => setSelectedTxn(null)}
+  maxWidth="max-w-[480px]"
+  footer={
+    <div className="flex items-center gap-2">
+      <button className="flex-1 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition hover:bg-slate-800">
+        Force Chargeback
+      </button>
 
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 240 }}
-              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-[480px] flex-col overflow-y-auto border-l border-slate-800 bg-slate-950/95 p-5 font-mono text-xs text-slate-300 shadow-[0_0_50px_rgba(0,0,0,0.9)] lg:p-6"
-            >
-              <div className="mb-5 flex shrink-0 items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-2">
-                  <Fingerprint className="h-4 w-4 text-cyan-300" />
-                  <span className="text-xs font-black uppercase tracking-widest text-slate-200">
-                    AI Risk Analysis Payload
-                  </span>
-                </div>
+      <button className="flex-1 rounded-xl border border-emerald-500/20 bg-emerald-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-emerald-300 transition hover:border-emerald-500/40 hover:bg-emerald-900/40">
+        Authorize Clear
+      </button>
+    </div>
+  }
+>
+  <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
+    <div className="absolute right-4 top-4 rounded border border-cyan-500/10 bg-cyan-500/10 px-2 py-1 text-[9px] font-black tracking-wider text-cyan-300">
+      {selectedTxn.id}
+    </div>
 
-                <button
-                  onClick={() => setSelectedTxn(null)}
-                  className="rounded-lg border border-slate-800 bg-slate-900/70 p-1 text-slate-500 transition hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-600">
+      Transfer Value
+    </p>
 
-              <div className="flex-1 space-y-5">
-                <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
-                  <div className="absolute right-4 top-4 rounded border border-cyan-500/10 bg-cyan-500/10 px-2 py-1 text-[9px] font-black tracking-wider text-cyan-300">
-                    {selectedTxn.id}
-                  </div>
+    <h3 className="mt-1 text-2xl font-black text-white">
+      {selectedTxn.amount}
+    </h3>
 
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-600">
-                    Transfer Value
-                  </p>
+    <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-800 pt-3 text-[10px]">
+      <Info label="User" value={selectedTxn.user} />
+      <Info label="Type" value={selectedTxn.type} cyan />
+      <Info label="Payee" value={selectedTxn.payee} wide />
+    </div>
+  </div>
 
-                  <h3 className="mt-1 text-2xl font-black text-white">
-                    {selectedTxn.amount}
-                  </h3>
+  <InfoPanel title="AI Diagnosis" icon={Cpu} color="cyan">
+    {selectedTxn.aiExplanation}
+  </InfoPanel>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-800 pt-3 text-[10px]">
-                    <Info label="User" value={selectedTxn.user} />
-                    <Info label="Type" value={selectedTxn.type} cyan />
-                    <Info label="Payee" value={selectedTxn.payee} wide />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                      Threat Index
-                    </p>
-                    <p
-                      className={`mt-1 text-xl font-black ${
-                        getRiskStyles(selectedTxn.riskScore).split(" ")[0]
-                      }`}
-                    >
-                      {selectedTxn.riskScore}%
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                      Decision
-                    </p>
-                    <span
-                      className={`mt-2 inline-block rounded-lg border px-2 py-1 text-[9px] font-black uppercase ${
-                        DECISION_THEMES[selectedTxn.decision]
-                      }`}
-                    >
-                      {selectedTxn.decision}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3.5">
-                  <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-cyan-300">
-                    <Cpu className="h-3.5 w-3.5" />
-                    AI Diagnosis
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-slate-400">
-                    {selectedTxn.aiExplanation}
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Device Context
-                  </p>
-                  <div className="mt-3 space-y-2 text-[10px]">
-                    <InfoRow label="DEVICE" value={selectedTxn.device} />
-                    <InfoRow
-                      label="FINGERPRINT"
-                      value={selectedTxn.fingerprint}
-                      purple
-                    />
-                    <InfoRow label="LOCATION" value={selectedTxn.location} />
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
-                  <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    Timeline
-                  </p>
-
-                  <div className="relative mt-3 space-y-3 pl-1 before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-800">
-                    {selectedTxn.timeline.map(([status, detail, clock]) => (
-                      <div key={`${status}-${clock}`} className="relative flex gap-3 text-[10px]">
-                        <span className="z-10 mt-0.5 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-slate-950 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-                        <div>
-                          <p className="leading-tight text-slate-400">
-                            <span className="mr-1 rounded border border-slate-800 bg-slate-900 px-1 text-[9px] font-bold uppercase text-slate-200">
-                              {status}
-                            </span>
-                            {detail}
-                          </p>
-                          <span className="text-[9px] text-slate-600">
-                            {clock}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5 flex shrink-0 items-center gap-2 border-t border-slate-800 pt-4">
-                <button className="flex-1 rounded-xl border border-slate-800 bg-slate-900 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-300 transition hover:bg-slate-800">
-                  Force Chargeback
-                </button>
-
-                <button className="flex-1 rounded-xl border border-emerald-500/20 bg-emerald-950/40 py-2.5 text-[10px] font-bold uppercase tracking-widest text-emerald-300 transition hover:border-emerald-500/40 hover:bg-emerald-900/40">
-                  Authorize Clear
-                </button>
-              </div>
-            </motion.aside>
-          </>
+  <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
+    <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+      Device Context
+    </p>
+    <div className="mt-3 space-y-2 text-[10px]">
+      <InfoRow label="DEVICE" value={selectedTxn.device} />
+      <InfoRow label="FINGERPRINT" value={selectedTxn.fingerprint} purple />
+      <InfoRow label="LOCATION" value={selectedTxn.location} />
+    </div>
+  </div>
+</DrawerShell>
+         </>
         )}
       </AnimatePresence>
     </motion.div>

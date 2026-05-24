@@ -5,7 +5,6 @@ import {
   Terminal,
   Search,
   Filter,
-  X,
   CheckCircle,
   Clock,
   Cpu,
@@ -21,6 +20,7 @@ import ActionButton from "../components/common/ActionButton";
 import InfoPanel from "../components/common/InfoPanel";
 import InfoRow from "../components/common/InfoRow";
 import MiniInfo from "../components/common/MiniInfo";
+import DrawerShell from "../components/common/DrawerShell";
 
 const initialAlerts = [
   {
@@ -465,18 +465,21 @@ export default function Alerts() {
               <div className="flex-1 space-y-5">
                 <DrawerCard alert={inspectedAlert} />
 
-          <InfoPanel
+<InfoPanel
   title="AI Behavioral Analysis"
   icon={Zap}
   color="rose"
 >
+  {inspectedAlert.aiExplanation}
 </InfoPanel>
 
 <InfoPanel
   title="Recommended Action Plan"
   icon={CheckCircle}
   color="cyan"
-></InfoPanel>
+>
+  {inspectedAlert.recommendedAction}
+</InfoPanel>
 
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
                   <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
@@ -559,4 +562,3 @@ function DrawerCard({ alert }) {
   );
 }
 
-f
