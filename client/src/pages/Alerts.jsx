@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React  from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ShieldAlert,
@@ -22,156 +22,8 @@ import InfoRow from "../components/common/InfoRow";
 import MiniInfo from "../components/common/MiniInfo";
 import DrawerShell from "../components/common/DrawerShell";
 
-const initialAlerts = [
-  {
-    alertId: "ALT-9081",
-    title: "SIM-Swap Account Hijack Attempt",
-    user: "Vikram Malhotra",
-    accountId: "ACC-8831-U",
-    severity: "Critical",
-    status: "Open",
-    riskScore: 98,
-    category: "Account Takeover",
-    source: "Mobile Telco Sync",
-    time: "2m ago",
-    reason: "IMSI mismatch with device identifier change.",
-    aiExplanation:
-      "Device fingerprint changed concurrently with telecom IMSI cycling. Step-up validation bypass pattern detected.",
-    recommendedAction:
-      "Lock account ledger, invalidate tokens, and flag linked UPI routing tables.",
-    sessionContext: {
-      ip: "103.44.112.9",
-      device: "Samsung Galaxy S24 Ultra Emulator",
-      location: "Ranchi, IN",
-    },
-    timeline: [
-      ["Triggered", "High-velocity access telemetry flagged", "2m ago"],
-      ["Evaluated", "Mule routing correlation discovered", "1m ago"],
-      ["Frozen", "Automated session freeze deployed", "45s ago"],
-    ],
-  },
-  {
-    alertId: "ALT-9082",
-    title: "Credential Stuffing Cascade",
-    user: "Deepika Rao",
-    accountId: "ACC-1104-Y",
-    severity: "Critical",
-    status: "Investigating",
-    riskScore: 94,
-    category: "Authentication Fraud",
-    source: "Auth Gateway Node",
-    time: "8m ago",
-    reason: "14 password attempts within 3.2 seconds.",
-    aiExplanation:
-      "Macro-driven credential injection detected using headless browser timing markers.",
-    recommendedAction:
-      "Blacklist IP reputation cluster and dispatch cryptographic CAPTCHA sequence.",
-    sessionContext: {
-      ip: "185.220.101.44",
-      device: "HeadlessChrome / Linux",
-      location: "Tor Exit Relay",
-    },
-    timeline: [
-      ["Detected", "Sequential rate violations registered", "8m ago"],
-      ["Isolated", "Traffic redirected to honeypot layer", "6m ago"],
-    ],
-  },
-  {
-    alertId: "ALT-9083",
-    title: "Unusual UPI Velocity Spurt",
-    user: "Amit Sharma",
-    accountId: "ACC-5521-A",
-    severity: "High",
-    status: "Open",
-    riskScore: 82,
-    category: "Mule Activity",
-    source: "NPCI Layer-2",
-    time: "14m ago",
-    reason: "7 outbound transfers under 120 seconds.",
-    aiExplanation:
-      "Outbound transfer structure resembles mule transaction splitting below tracking thresholds.",
-    recommendedAction:
-      "Clamp transaction velocity to ₹5,000 pending customer confirmation.",
-    sessionContext: {
-      ip: "49.36.88.21",
-      device: "OnePlus 12 / Android 14",
-      location: "Ahmedabad, IN",
-    },
-    timeline: [["Flagged", "Velocity burst matched mule matrices", "14m ago"]],
-  },
-  {
-    alertId: "ALT-9084",
-    title: "Impossible Geolocation Pivot",
-    user: "Sarah Jones",
-    accountId: "ACC-0911-X",
-    severity: "High",
-    status: "Investigating",
-    riskScore: 79,
-    category: "Session Hijacking",
-    source: "Edge Engine",
-    time: "22m ago",
-    reason: "New Delhi to Frankfurt in 14 minutes.",
-    aiExplanation:
-      "Physical transit validation failed. Token usage shows cross-border activity without travel exception.",
-    recommendedAction: "Terminate active tokens across all connected devices.",
-    sessionContext: {
-      ip: "80.14.99.102",
-      device: "Safari / Apple Silicon Mac",
-      location: "Frankfurt, DE",
-    },
-    timeline: [["Triggered", "Geo-distance mismatch identified", "22m ago"]],
-  },
-  {
-    alertId: "ALT-9085",
-    title: "Automation Script Manipulation",
-    user: "Nikhil Vance",
-    accountId: "ACC-3310-M",
-    severity: "Medium",
-    status: "Resolved",
-    riskScore: 58,
-    category: "API Abuse",
-    source: "Sandbox Engine",
-    time: "1h ago",
-    reason: "Profile updates at millisecond boundaries.",
-    aiExplanation:
-      "Form interaction analytics indicate direct scripted data injection.",
-    recommendedAction: "Archive incident and force hardware-token verification.",
-    sessionContext: {
-      ip: "103.88.221.4",
-      device: "Puppeteer Instance",
-      location: "Bengaluru, IN",
-    },
-    timeline: [
-      ["Flagged", "Micro-timing pattern evaluated", "1h ago"],
-      ["Resolved", "Analyst validated automation context", "40m ago"],
-    ],
-  },
-  {
-    alertId: "ALT-9086",
-    title: "Rooted Client Device Access",
-    user: "Karan Johar",
-    accountId: "ACC-6612-L",
-    severity: "Low",
-    status: "Escalated",
-    riskScore: 35,
-    category: "Device Integrity",
-    source: "App Armor",
-    time: "3h ago",
-    reason: "Su-binary detected in device sandbox.",
-    aiExplanation:
-      "Rooted device increases risk of remote accessibility trojans and background tampering.",
-    recommendedAction: "Restrict app to view-only mode until device attestation clears.",
-    sessionContext: {
-      ip: "223.10.45.12",
-      device: "Rooted Pixel 7a",
-      location: "Chandigarh, IN",
-    },
-    timeline: [
-      ["Reported", "Integrity attestation failed", "3h ago"],
-      ["Escalated", "Sent to engineering review", "2h ago"],
-    ],
-  },
-];
+import useAlerts from "../hooks/useAlerts";
+
 
 const SEVERITY_THEMES = {
   Critical: "text-rose-300 border-rose-500/30 bg-rose-500/10",
@@ -202,45 +54,21 @@ const itemVariants = {
 };
 
 export default function Alerts() {
-  const [alerts, setAlerts] = useState(initialAlerts);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [severityFilter, setSeverityFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [inspectedAlert, setInspectedAlert] = useState(null);
-
-  const metrics = useMemo(
-    () => ({
-      critical: alerts.filter((a) => a.severity === "Critical" && a.status !== "Resolved").length,
-      high: alerts.filter((a) => a.severity === "High" && a.status !== "Resolved").length,
-      review: alerts.filter((a) => a.status === "Investigating").length,
-      resolved: alerts.filter((a) => a.status === "Resolved").length,
-    }),
-    [alerts]
-  );
-
-  const filteredAlerts = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
-    return alerts.filter((a) => {
-      const search =
-        !q ||
-        a.alertId.toLowerCase().includes(q) ||
-        a.user.toLowerCase().includes(q) ||
-        a.title.toLowerCase().includes(q) ||
-        a.category.toLowerCase().includes(q);
-
-      return (
-        search &&
-        (severityFilter === "All" || a.severity === severityFilter) &&
-        (statusFilter === "All" || a.status === statusFilter)
-      );
-    });
-  }, [alerts, searchQuery, severityFilter, statusFilter]);
-
-  const updateAlert = (id, patch) => {
-    setAlerts((prev) => prev.map((a) => (a.alertId === id ? { ...a, ...patch } : a)));
-    setInspectedAlert((prev) => (prev?.alertId === id ? { ...prev, ...patch } : prev));
-  };
+ 
+  const {
+  alerts,
+  filteredAlerts,
+  metrics,
+  searchQuery,
+  setSearchQuery,
+  severityFilter,
+  setSeverityFilter,
+  statusFilter,
+  setStatusFilter,
+  inspectedAlert,
+  setInspectedAlert,
+  updateAlert,
+} = useAlerts();
 
   return (
     <motion.div
