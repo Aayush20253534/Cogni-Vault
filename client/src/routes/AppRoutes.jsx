@@ -1,5 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import DashboardLayout from "../components/layout/DashboardLayout";
+import ProtectedRoute from "./ProtectedRoute";
+
 import Dashboard from "../pages/Dashboard";
 import Users from "../pages/Users";
 import Transactions from "../pages/Transactions";
@@ -11,10 +14,19 @@ import Login from "../pages/Login";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
       <Route path="/login" element={<Login />} />
 
-      <Route path="/admin" element={<DashboardLayout />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="transactions" element={<Transactions />} />
@@ -22,6 +34,8 @@ export default function AppRoutes() {
         <Route path="sessions" element={<Sessions />} />
         <Route path="reports" element={<Reports />} />
       </Route>
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }

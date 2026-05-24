@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Shield,
-  Lock,
   Mail,
-  Terminal,
-  Activity,
-  AlertTriangle,
-  CheckCircle,
+  Lock,
   Eye,
   EyeOff,
+  ArrowRight,
+  ScanLine,
+  Sparkles,
 } from "lucide-react";
 
 const DEMO_EMAIL = "admin@behaviorshield.internal";
@@ -32,7 +31,7 @@ export default function Login() {
     const cleanEmail = email.trim().toLowerCase();
 
     if (cleanEmail !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
-      setError("Invalid demo credentials. Use the sandbox keys shown below.");
+      setError("Invalid demo credentials.");
       return;
     }
 
@@ -48,123 +47,65 @@ export default function Login() {
 
       setIsLoading(false);
       navigate("/admin/dashboard");
-    }, 800);
+    }, 700);
   };
 
   return (
-    <div className="min-h-screen bg-[#060b19] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0c1938] via-[#060b19] to-[#03060f] flex text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-400">
-      <div className="hidden lg:flex lg:w-1/2 p-12 flex-col justify-between border-r border-slate-800/40 bg-gradient-to-b from-slate-950/20 to-transparent relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
+    <main className="relative min-h-screen w-full overflow-hidden bg-[#020617] text-slate-100 flex items-center justify-center px-4 py-6">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_80%_80%,rgba(59,130,246,0.16),transparent_30%),linear-gradient(180deg,#020617,#030712)]" />
 
-        <div className="flex items-center gap-3 relative z-10">
-          <div className="p-2.5 bg-gradient-to-br from-cyan-500/20 to-indigo-500/10 rounded-xl border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-            <Shield className="w-6 h-6 text-cyan-400" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              BehaviorShield
+      {/* Grid */}
+      <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(to_right,#38bdf8_1px,transparent_1px),linear-gradient(to_bottom,#38bdf8_1px,transparent_1px)] bg-[size:42px_42px]" />
+
+      {/* Floating blur orbs */}
+      <div className="absolute -top-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-[110px]" />
+      <div className="absolute -bottom-24 right-10 h-80 w-80 rounded-full bg-blue-600/20 blur-[120px]" />
+
+      <section className="relative w-full max-w-[430px]">
+        {/* Outer neon ring */}
+        <div className="absolute -inset-[1px] rounded-[28px] bg-gradient-to-br from-cyan-400/60 via-blue-500/20 to-transparent blur-sm" />
+
+        <div className="relative rounded-[28px] border border-cyan-400/20 bg-slate-950/75 backdrop-blur-2xl shadow-[0_0_60px_rgba(34,211,238,0.16)] px-5 py-6 sm:px-8 sm:py-8">
+          {/* Top scanner line */}
+          <div className="absolute left-8 right-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
+
+          <div className="mb-7 flex flex-col items-center text-center">
+            <div className="relative mb-4">
+              <div className="absolute inset-0 rounded-2xl bg-cyan-400/30 blur-xl" />
+              <div className="relative h-16 w-16 rounded-2xl border border-cyan-300/30 bg-cyan-400/10 flex items-center justify-center shadow-[inset_0_0_24px_rgba(34,211,238,0.12)]">
+                <Shield className="h-8 w-8 text-cyan-300" />
+              </div>
+            </div>
+
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[11px] font-mono text-cyan-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 animate-pulse" />
+              SECURE ADMIN NODE
+            </div>
+
+            <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-white via-cyan-100 to-cyan-400 bg-clip-text text-transparent">
+              Cogni-Vault
             </h1>
-            <p className="text-xs text-cyan-400/80 font-mono tracking-widest uppercase mt-0.5">
+
+            <p className="mt-1 text-sm text-slate-400">
               Bank Fraud Command Center
-            </p>
-          </div>
-        </div>
-
-        <div className="my-auto max-w-md space-y-6 relative z-10">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              SYSTEMS CORE: OPERATIONAL
-            </div>
-            <h2 className="text-3xl font-extrabold tracking-tight leading-tight text-slate-100">
-              Real-time behavior analysis & telemetry tracking.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60 backdrop-blur-sm">
-              <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
-                <span>ACTIVE NODE</span>
-                <Terminal className="w-3.5 h-3.5 text-slate-500" />
-              </div>
-              <p className="text-sm font-mono text-cyan-400 font-semibold">
-                Node-047//Demo
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60 backdrop-blur-sm">
-              <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
-                <span>RISK ENGINE</span>
-                <Activity className="w-3.5 h-3.5 text-indigo-400" />
-              </div>
-              <p className="text-xl font-semibold text-white tracking-tight">
-                Live
-              </p>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 font-mono text-xs text-slate-400 space-y-2.5 shadow-inner">
-            <div className="flex items-center justify-between border-b border-slate-900 pb-2">
-              <span className="text-slate-500">THREAT TELEMETRY</span>
-              <span className="text-[10px] text-slate-500">MOCK FEED</span>
-            </div>
-            <div className="flex items-center gap-2 text-emerald-400/90">
-              <CheckCircle className="w-3.5 h-3.5 shrink-0" />
-              <span>AI Engine: Pattern modeling synchronized.</span>
-            </div>
-            <div className="flex items-center gap-2 text-amber-400/90">
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-              <span>Suspicious UPI attempt isolated: TXN_MOCK_892</span>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-xs text-slate-500 font-mono relative z-10">
-          Classification: Restricted demo environment // authorized admin access only.
-        </p>
-      </div>
-
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 sm:px-12 lg:px-20 py-12 relative">
-        <div className="lg:hidden flex items-center gap-3 mb-10 self-start">
-          <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
-            <Shield className="w-5 h-5 text-cyan-400" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-white">BehaviorShield</h1>
-            <p className="text-[10px] text-cyan-400 font-mono tracking-wider uppercase">
-              Bank Fraud Command Center
-            </p>
-          </div>
-        </div>
-
-        <div className="w-full max-w-md bg-slate-900/30 border border-slate-800/80 rounded-2xl p-8 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative transition-all duration-300 hover:border-slate-700">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent blur-[1px]" />
-
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold tracking-tight text-white">
-              Gateway Authentication
-            </h3>
-            <p className="text-sm text-slate-400 mt-1">
-              Enter admin credentials to access fraud monitoring operations.
             </p>
           </div>
 
           {error && (
-            <div className="mb-5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
-                Admin Identifier
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Admin Identity
               </label>
-              <div className="relative group/input">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 group-focus-within/input:text-cyan-400 transition-colors">
-                  <Mail className="w-4 h-4" />
-                </div>
+
+              <div className="relative group">
+                <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-300 transition" />
                 <input
                   type="email"
                   required
@@ -172,112 +113,85 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={DEMO_EMAIL}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/30 transition-all font-mono text-sm shadow-inner"
+                  className="w-full rounded-2xl border border-slate-800 bg-slate-950/80 py-3.5 pl-10 pr-4 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-300/70 focus:ring-4 focus:ring-cyan-400/10"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">
-                  Access Key
-                </label>
-                <button
-                  type="button"
-                  className="text-xs text-slate-500 hover:text-cyan-400 transition-colors"
-                  onClick={() => setError("Password reset is disabled in demo mode.")}
-                >
-                  Reset Key?
-                </button>
-              </div>
+            <div>
+              <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Access Key
+              </label>
 
-              <div className="relative group/input">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 group-focus-within/input:text-cyan-400 transition-colors">
-                  <Lock className="w-4 h-4" />
-                </div>
+              <div className="relative group">
+                <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-300 transition" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="admin123"
-                  className="w-full pl-10 pr-10 py-3 bg-slate-950/50 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/30 transition-all font-mono text-sm shadow-inner"
+                  placeholder={DEMO_PASSWORD}
+                  className="w-full rounded-2xl border border-slate-800 bg-slate-950/80 py-3.5 pl-10 pr-11 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-300/70 focus:ring-4 focus:ring-cyan-400/10"
                 />
+
                 <button
                   type="button"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-cyan-300 transition"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2.5 cursor-pointer group text-xs text-slate-400 select-none">
-                <div className="relative flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-4 h-4 bg-slate-950 rounded border border-slate-800 peer-checked:border-cyan-500 peer-checked:bg-cyan-500/10 flex items-center justify-center transition-all group-hover:border-slate-600">
-                    <div className="w-1.5 h-1.5 bg-cyan-400 rounded-sm opacity-0 peer-checked:opacity-100 transition-all shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
-                  </div>
-                </div>
-                <span>Keep encrypted session open</span>
+            <div className="flex items-center justify-between text-xs text-slate-400">
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-700 bg-slate-950 accent-cyan-400"
+                />
+                Remember node
               </label>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setError("Password reset is disabled in demo mode.")
+                }
+                className="hover:text-cyan-300 transition"
+              >
+                Reset key?
+              </button>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 mt-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold tracking-wide text-sm shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_25px_rgba(6,182,212,0.45)] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center gap-2 group/btn"
+              className="group mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 px-4 py-3.5 text-sm font-black text-slate-950 shadow-[0_0_28px_rgba(34,211,238,0.25)] transition hover:shadow-[0_0_40px_rgba(34,211,238,0.42)] hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                  <span>Authenticating...</span>
+                  <span className="h-4 w-4 rounded-full border-2 border-slate-950 border-t-transparent animate-spin" />
+                  Authenticating
                 </>
               ) : (
                 <>
-                  <span>Initialize Connection</span>
-                  <Terminal className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                  Enter Command Center
+                  <ArrowRight
+                    size={17}
+                    className="transition group-hover:translate-x-1"
+                  />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-slate-800/60 font-mono text-xs">
-            <div className="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800/80">
-              <span className="text-cyan-400/90 font-semibold block mb-1.5 uppercase tracking-wider text-[10px]">
-                Demo Sandbox Credentials
-              </span>
-              <div className="space-y-1 text-slate-400 text-[11px]">
-                <div className="flex justify-between gap-4">
-                  <span className="text-slate-500">ID:</span>
-                  <span className="text-right">{DEMO_EMAIL}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">KEY:</span>
-                  <span>{DEMO_PASSWORD}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-        <div className="mt-8 text-center text-[11px] text-slate-600 font-mono">
-          &copy; 2026 BehaviorShield. Demo banking security environment.
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
