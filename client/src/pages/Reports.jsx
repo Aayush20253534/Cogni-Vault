@@ -22,6 +22,7 @@ import {
 import DarkSelect from "../components/common/DarkSelect";
 import IconButton from "../components/common/IconButton";
 import InfoPanel from "../components/common/InfoPanel";
+import MiniBox from "../components/common/MiniBox";
 
 const initialReports = [
   {
@@ -538,17 +539,5 @@ export default function Reports() {
 }
 
 
-function MiniBox({ label, value, danger }) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
-      <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-slate-500">
-        {label}
-      </p>
-      <p className={`mt-1 text-sm font-black ${danger ? "text-rose-300" : "text-slate-300"}`}>
-        {value}
-      </p>
-    </div>
-  );
-}
 
 

@@ -19,6 +19,7 @@ import {
 import DarkSelect from "../components/common/DarkSelect";
 import ActionButton from "../components/common/ActionButton";
 import InfoRow from "../components/common/InfoRow";
+import InfoPanel from "../components/common/InfoPanel";
 
 
 const sessionMockData = [
@@ -543,13 +544,13 @@ export default function Sessions() {
                   <MiniBadge label="State" value={inspectedSession.sessionState} className={STATE_THEMES[inspectedSession.sessionState]} />
                 </div>
 
-                <InfoPanel title="BehaviorShield Diagnosis">
-                  {inspectedSession.aiExplanation}
-                </InfoPanel>
+               <InfoPanel title="BehaviorShield Diagnosis" icon={Cpu} color="cyan">
+  {inspectedSession.aiExplanation}
+</InfoPanel>
 
-                <InfoPanel title="Flag Reason" rose>
-                  {inspectedSession.anomalyReason}
-                </InfoPanel>
+<InfoPanel title="Flag Reason" icon={Cpu} color="rose">
+  {inspectedSession.anomalyReason}
+</InfoPanel>
 
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
                   <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
@@ -676,20 +677,3 @@ function MiniBadge({ label, value, className }) {
   );
 }
 
-function InfoPanel({ title, children, rose = false }) {
-  return (
-    <div
-      className={`rounded-xl border p-3.5 ${
-        rose
-          ? "border-rose-500/10 bg-rose-500/10 text-rose-300"
-          : "border-cyan-500/10 bg-cyan-500/10 text-cyan-300"
-      }`}
-    >
-      <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest">
-        <Cpu className="h-3.5 w-3.5" />
-        {title}
-      </div>
-      <p className="text-[11px] leading-relaxed text-slate-400">{children}</p>
-    </div>
-  );
-}

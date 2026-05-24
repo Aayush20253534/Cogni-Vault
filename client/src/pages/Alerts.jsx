@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import DarkSelect from "../components/common/DarkSelect";
 import ActionButton from "../components/common/ActionButton";
+import InfoPanel from "../components/common/InfoPanel";
+import InfoRow from "../components/common/InfoRow";
 
 const initialAlerts = [
   {
@@ -462,13 +464,18 @@ export default function Alerts() {
               <div className="flex-1 space-y-5">
                 <DrawerCard alert={inspectedAlert} />
 
-                <InfoPanel title="AI Behavioral Analysis" icon={<Zap className="h-3.5 w-3.5" />} color="rose">
-                  {inspectedAlert.aiExplanation}
-                </InfoPanel>
+          <InfoPanel
+  title="AI Behavioral Analysis"
+  icon={Zap}
+  color="rose"
+>
+</InfoPanel>
 
-                <InfoPanel title="Recommended Action Plan" icon={<CheckCircle className="h-3.5 w-3.5" />} color="cyan">
-                  {inspectedAlert.recommendedAction}
-                </InfoPanel>
+<InfoPanel
+  title="Recommended Action Plan"
+  icon={CheckCircle}
+  color="cyan"
+></InfoPanel>
 
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5">
                   <p className="border-b border-slate-800 pb-2 text-[9px] font-bold uppercase tracking-widest text-slate-500">
@@ -562,30 +569,3 @@ function MiniInfo({ label, value, cyan }) {
   );
 }
 
-function InfoPanel({ title, icon, color, children }) {
-  const cls =
-    color === "rose"
-      ? "border-rose-500/10 bg-rose-500/10 text-rose-300"
-      : "border-cyan-500/10 bg-cyan-500/10 text-cyan-300";
-
-  return (
-    <div className={`rounded-xl border p-3.5 ${cls}`}>
-      <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest">
-        {icon}
-        {title}
-      </div>
-      <p className="text-[11px] leading-relaxed text-slate-400">{children}</p>
-    </div>
-  );
-}
-
-function InfoRow({ label, value, amber = false }) {
-  return (
-    <div className="mt-2 flex items-start justify-between gap-4 text-[10px]">
-      <span className="shrink-0 text-slate-600">{label}:</span>
-      <span className={`text-right font-medium ${amber ? "text-amber-300" : "text-slate-300"}`}>
-        {value}
-      </span>
-    </div>
-  );
-}
