@@ -1,22 +1,42 @@
-from fastapi import FastAPI , WebSocket , WebSocketDisconnect
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect , Depends
+from connection_manager import ConnectionManager
+from auth.database import get_db
+from auth import get_current_ws_user
+from sqlalchemy.orm import Session
 
-app = FastAPI()
+router = APIRouter()
 
-"""@app.get("/")
-async def home():
-    with open("index.html", "r") as f:
-        return HTMLResponse(f.read())
 
-"""
-class ConnectionManager:
+@router.websocket("/ws")
+async def websocket_endpoint(
+    websocket: WebSocket,
+    db: Session = Depends(get_db)
+):
 
-    def __init__(self):
-        self.active_connections = []
+    current_user = await get_current_ws_user(
+        websocket,
+        db
+    )
 
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
+    if not current_user:
+        return
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+    await websocket.accept()
+
+    print(
+        f"{current_user.username} connected"
+    )
+
+    try:
+
+        while True:
+
+            data = await websocket.receive_json()
+
+            print(data)
+
+    except WebSocketDisconnect:
+
+        print(
+            f"{current_user.username} disconnected"
+        )
