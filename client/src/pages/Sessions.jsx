@@ -20,6 +20,7 @@ import DarkSelect from "../components/common/DarkSelect";
 import ActionButton from "../components/common/ActionButton";
 import InfoRow from "../components/common/InfoRow";
 import InfoPanel from "../components/common/InfoPanel";
+import MiniInfo from "../components/common/MiniInfo";
 
 
 const sessionMockData = [
@@ -642,17 +643,6 @@ function DrawerHeader({ session }) {
         <MiniInfo label="Device" value={session.device} />
         <MiniInfo label="Browser" value={session.browser} />
       </div>
-    </div>
-  );
-}
-
-function MiniInfo({ label, value, amber }) {
-  return (
-    <div>
-      <p className="text-slate-600">{label.toUpperCase()}:</p>
-      <p className={`truncate font-bold ${amber ? "text-amber-300" : "text-slate-300"}`}>
-        {value}
-      </p>
     </div>
   );
 }

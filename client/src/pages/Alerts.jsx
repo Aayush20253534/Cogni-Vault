@@ -20,6 +20,7 @@ import DarkSelect from "../components/common/DarkSelect";
 import ActionButton from "../components/common/ActionButton";
 import InfoPanel from "../components/common/InfoPanel";
 import InfoRow from "../components/common/InfoRow";
+import MiniInfo from "../components/common/MiniInfo";
 
 const initialAlerts = [
   {
@@ -558,14 +559,4 @@ function DrawerCard({ alert }) {
   );
 }
 
-function MiniInfo({ label, value, cyan }) {
-  return (
-    <div>
-      <p className="text-slate-600">{label.toUpperCase()}:</p>
-      <p className={`truncate font-bold ${cyan ? "text-cyan-300" : "text-slate-300"}`}>
-        {value}
-      </p>
-    </div>
-  );
-}
-
+f
