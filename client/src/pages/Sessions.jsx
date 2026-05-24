@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -22,176 +22,7 @@ import InfoPanel from "../components/common/InfoPanel";
 import MiniInfo from "../components/common/MiniInfo";
 import DrawerShell from "../components/common/DrawerShell";
 
-const sessionMockData = [
-  {
-    sessionId: "SES-88401",
-    user: "Arjun Mehta",
-    accountId: "ACC-5421-B",
-    ip: "103.241.12.89",
-    location: "Mumbai, IN",
-    device: "OnePlus 11",
-    browser: "Chrome Mobile v124",
-    behaviorScore: 94,
-    sessionState: "Suspicious",
-    riskLevel: "High",
-    duration: "4m 12s",
-    lastActivity: "12s ago",
-    anomalyReason: "Emulator Signature Detected",
-    fingerprint: "FPR-A98B2-X9",
-    aiExplanation:
-      "Browser canvas rendering indicates headless automated runtime orchestration and compromised device parameters.",
-    networkIntel:
-      "ISP: Reliance Jio | Connection Type: Cellular spoofed gateway",
-    timeline: [
-      ["Session Initialized", "Gateway handshake verified.", "4m 12s ago"],
-      ["Biometric Evaluation", "Touch latency indicates non-human vectors.", "3m 50s ago"],
-      ["Fund Transfer Staged", "Attempted ₹450,000 routing.", "1m 15s ago"],
-    ],
-  },
-  {
-    sessionId: "SES-88402",
-    user: "Elena Rostova",
-    accountId: "ACC-0092-K",
-    ip: "185.220.101.5",
-    location: "Frankfurt, DE",
-    device: "Apple MacBook Pro",
-    browser: "Safari v17.4",
-    behaviorScore: 91,
-    sessionState: "Suspicious",
-    riskLevel: "High",
-    duration: "12m 45s",
-    lastActivity: "4s ago",
-    anomalyReason: "Impossible Travel Pivot",
-    fingerprint: "FPR-C11D9-M4",
-    aiExplanation:
-      "Authentication token moved from Bengaluru to Frankfurt within 14 minutes. Physical transit validation failed.",
-    networkIntel: "ISP: M2 Hosting | Known Tor exit relay",
-    timeline: [
-      ["Login", "Login cleared from Bengaluru profile node.", "12m ago"],
-      ["Token Hijack", "Session state replicated across proxy framework.", "8m ago"],
-    ],
-  },
-  {
-    sessionId: "SES-88403",
-    user: "Vikram Malhotra",
-    accountId: "ACC-7719-L",
-    ip: "49.36.185.210",
-    location: "Ahmedabad, IN",
-    device: "Xiaomi Redmi Note 12",
-    browser: "Edge Mobile v123",
-    behaviorScore: 82,
-    sessionState: "Active",
-    riskLevel: "High",
-    duration: "1m 30s",
-    lastActivity: "Just now",
-    anomalyReason: "Macro Cadence Execution",
-    fingerprint: "FPR-E4421-Z0",
-    aiExplanation:
-      "Deterministic coordinate interactions and uniform field navigation indicate macro/scripted input.",
-    networkIntel: "ISP: Airtel | Dynamic broadband pool",
-    timeline: [["Input Injection", "12 fields injected within 88ms.", "45s ago"]],
-  },
-  {
-    sessionId: "SES-88404",
-    user: "Priya Sharma",
-    accountId: "ACC-1102-M",
-    ip: "14.139.22.4",
-    location: "New Delhi, IN",
-    device: "Custom Desktop PC",
-    browser: "Chrome Enterprise v125",
-    behaviorScore: 18,
-    sessionState: "Active",
-    riskLevel: "Low",
-    duration: "45m 12s",
-    lastActivity: "2m ago",
-    anomalyReason: "None",
-    fingerprint: "FPR-F9922-A1",
-    aiExplanation:
-      "Telemetry matches verified baseline profiles with clean keyboard, mouse and network behavior.",
-    networkIntel: "ISP: National Knowledge Network | Corporate fixed line",
-    timeline: [["Statement Inquiry", "Downloaded historical ledger.", "30m ago"]],
-  },
-  {
-    sessionId: "SES-88405",
-    user: "Kabir Thapar",
-    accountId: "ACC-6691-Q",
-    ip: "103.44.112.19",
-    location: "Ranchi, IN",
-    device: "Samsung Galaxy S24 Ultra",
-    browser: "Samsung Internet v24",
-    behaviorScore: 78,
-    sessionState: "Active",
-    riskLevel: "Medium",
-    duration: "8m 19s",
-    lastActivity: "1m ago",
-    anomalyReason: "Rooted Device Attestation Fail",
-    fingerprint: "FPR-K0032-B8",
-    aiExplanation:
-      "SafetyNet integrity failure detected. Superuser binary modules are accessible.",
-    networkIntel: "ISP: Reliance Jio | 5G mobile network",
-    timeline: [["Sandbox Exception", "Kernel tamper flag returned.", "8m ago"]],
-  },
-  {
-    sessionId: "SES-88406",
-    user: "Ananya Sen",
-    accountId: "ACC-3319-P",
-    ip: "192.168.43.11",
-    location: "Kolkata, IN",
-    device: "iPhone 15 Pro",
-    browser: "Safari Mobile v17",
-    behaviorScore: 45,
-    sessionState: "Active",
-    riskLevel: "Medium",
-    duration: "18m",
-    lastActivity: "5m ago",
-    anomalyReason: "Suspicious VPN Routing",
-    fingerprint: "FPR-L8810-C3",
-    aiExplanation:
-      "Traffic traverses encrypted datacenter hosting instead of residential access pools.",
-    networkIntel: "ISP: DigitalOcean block | Encrypted tunnel",
-    timeline: [["VPN Route", "Authentication routed over synthetic VPN layer.", "18m ago"]],
-  },
-  {
-    sessionId: "SES-88407",
-    user: "Zain Malik",
-    accountId: "ACC-4410-X",
-    ip: "103.88.221.14",
-    location: "Bengaluru, IN",
-    device: "Google Pixel 8 Pro",
-    browser: "Chrome Mobile v124",
-    behaviorScore: 99,
-    sessionState: "Locked",
-    riskLevel: "High",
-    duration: "5m 4s",
-    lastActivity: "1m ago",
-    anomalyReason: "Scripted Interface Scraping",
-    fingerprint: "FPR-P4410-Q5",
-    aiExplanation:
-      "Automated crawling signatures detected across restricted ledger endpoints.",
-    networkIntel: "ISP: ACT Fibernet | Metro backbone",
-    timeline: [["Automated Lock", "Portal deployed transaction lock.", "1m ago"]],
-  },
-  {
-    sessionId: "SES-88408",
-    user: "Meera Nair",
-    accountId: "ACC-1289-Y",
-    ip: "157.44.89.102",
-    location: "Kochi, IN",
-    device: "Asus ZenBook",
-    browser: "Chrome v124",
-    behaviorScore: 61,
-    sessionState: "Terminated",
-    riskLevel: "Medium",
-    duration: "14m 22s",
-    lastActivity: "10m ago",
-    anomalyReason: "Concurrent Multi-Device Access",
-    fingerprint: "FPR-R3310-K2",
-    aiExplanation:
-      "Conflicting browser configurations used the same access token concurrently.",
-    networkIntel: "ISP: Asianet | Local fiber terminal",
-    timeline: [["Session Annulled", "Token pools force-terminated.", "10m ago"]],
-  },
-];
+import useSessions from "../hooks/useSessions";
 
 const RISK_THEMES = {
   High: "text-rose-300 border-rose-500/30 bg-rose-500/10",
@@ -221,55 +52,21 @@ const itemVariants = {
 };
 
 export default function Sessions() {
-  const [sessions, setSessions] = useState(sessionMockData);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [riskFilter, setRiskFilter] = useState("All");
-  const [stateFilter, setStateFilter] = useState("All");
-  const [inspectedSession, setInspectedSession] = useState(null);
-
-  const summary = useMemo(
-    () => ({
-      active: sessions.filter((s) => s.sessionState === "Active").length,
-      suspicious: sessions.filter((s) => s.sessionState === "Suspicious").length,
-      device: sessions.filter((s) =>
-        `${s.anomalyReason}`.toLowerCase().includes("device")
-      ).length,
-      geo: sessions.filter((s) =>
-        `${s.anomalyReason}`.toLowerCase().match(/travel|vpn/)
-      ).length,
-      terminated: sessions.filter((s) => s.sessionState === "Terminated").length,
-    }),
-    [sessions]
-  );
-
-  const filteredSessions = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-
-    return sessions.filter((s) => {
-      const search =
-        !q ||
-        s.sessionId.toLowerCase().includes(q) ||
-        s.user.toLowerCase().includes(q) ||
-        s.ip.toLowerCase().includes(q) ||
-        s.device.toLowerCase().includes(q) ||
-        s.anomalyReason.toLowerCase().includes(q);
-
-      return (
-        search &&
-        (riskFilter === "All" || s.riskLevel === riskFilter) &&
-        (stateFilter === "All" || s.sessionState === stateFilter)
-      );
-    });
-  }, [sessions, searchQuery, riskFilter, stateFilter]);
-
-  const updateSession = (id, patch) => {
-    setSessions((prev) =>
-      prev.map((s) => (s.sessionId === id ? { ...s, ...patch } : s))
-    );
-    setInspectedSession((prev) =>
-      prev?.sessionId === id ? { ...prev, ...patch } : prev
-    );
-  };
+ 
+  const {
+  sessions,
+  filteredSessions,
+  summary,
+  searchQuery,
+  setSearchQuery,
+  riskFilter,
+  setRiskFilter,
+  stateFilter,
+  setStateFilter,
+  inspectedSession,
+  setInspectedSession,
+  updateSession,
+} = useSessions();
 
   return (
     <motion.div
