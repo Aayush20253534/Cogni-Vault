@@ -8,17 +8,15 @@ import LiveSessionTable from "../components/dashboard/LiveSessionTable";
 import FraudPieChart from "../components/dashboard/FraudPieChart";
 
 import {
-  Users,
-  Activity,
-  ShieldAlert,
-  CreditCard,
-  TrendingUp,
-  AlertTriangle,
   Cpu,
   Fingerprint,
 } from "lucide-react";
 
+import useDashboardStats from "../hooks/useDashboardStats";
+
 export default function Dashboard() {
+
+  const { statCards } = useDashboardStats();
   return (
     <div className="mx-auto w-full max-w-[1600px] space-y-6">
       {/* HEADER */}
@@ -47,67 +45,20 @@ export default function Dashboard() {
       </section>
 
       {/* STAT CARDS */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <StatCard
-          title="Total Users"
-          value="24,892"
-          change="+12%"
-          icon={Users}
-          color="cyan"
-          description="Monitored profiles across system"
-          trend="up"
-        />
-
-        <StatCard
-          title="Active Sessions"
-          value="1,284"
-          change="+8%"
-          icon={Activity}
-          color="emerald"
-          description="Real-time session tracking"
-          trend="up"
-        />
-
-        <StatCard
-          title="Fraud Alerts"
-          value="38"
-          change="+18%"
-          icon={ShieldAlert}
-          color="rose"
-          description="Incidents requiring analyst review"
-          trend="up"
-        />
-
-        <StatCard
-          title="Blocked Transactions"
-          value="128"
-          change="+31%"
-          icon={AlertTriangle}
-          color="amber"
-          description="Suspicious payments prevented"
-          trend="up"
-        />
-
-        <StatCard
-          title="Threat Score"
-          value="82%"
-          change="+5%"
-          icon={TrendingUp}
-          color="purple"
-          description="Aggregate anomaly intensity"
-          trend="up"
-        />
-
-        <StatCard
-          title="UPI Volume"
-          value="₹2.4Cr"
-          change="+14%"
-          icon={CreditCard}
-          color="blue"
-          description="Total scrutinized payment flow"
-          trend="up"
-        />
-      </section>
+<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+  {statCards.map((card) => (
+    <StatCard
+      key={card.title}
+      title={card.title}
+      value={card.value}
+      change={card.change}
+      icon={card.icon}
+      color={card.color}
+      description={card.description}
+      trend={card.trend}
+    />
+  ))}
+</section>
 
       {/* RISK OVERVIEW */}
       <RiskOverview />
