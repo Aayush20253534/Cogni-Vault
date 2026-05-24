@@ -6,7 +6,6 @@ import {
   Search,
   Filter,
   Download,
-  Eye,
   X,
   MapPin,
   Clock,
@@ -17,7 +16,9 @@ import {
   CreditCard,
   Zap,
 } from "lucide-react";
+import ActionButton from "../components/common/ActionButton";
 import DarkSelect from "../components/common/DarkSelect";
+import InfoRow from "../components/common/InfoRow";
 
 const transactionMockData = [
   {
@@ -490,13 +491,11 @@ export default function Transactions() {
                     </td>
 
                     <td className="whitespace-nowrap px-4 py-3.5 text-right">
-                      <button
-                        onClick={() => setSelectedTxn(txn)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-400 transition hover:border-cyan-500/30 hover:text-cyan-300"
-                      >
-                        <Eye className="h-3 w-3" />
-                        Inspect
-                      </button>
+                  <ActionButton
+  onClick={() => setSelectedTxn(txn)}
+  label="Inspect"
+  cyan
+/>
                     </td>
                   </tr>
                 ))
@@ -696,17 +695,4 @@ function Info({ label, value, cyan = false, wide = false }) {
   );
 }
 
-function InfoRow({ label, value, purple = false }) {
-  return (
-    <div className="flex items-start justify-between gap-4">
-      <span className="shrink-0 text-slate-600">{label}:</span>
-      <span
-        className={`text-right font-medium ${
-          purple ? "text-purple-300" : "text-slate-300"
-        }`}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
+

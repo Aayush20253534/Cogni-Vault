@@ -8,7 +8,6 @@ import {
   Search,
   Filter,
   Download,
-  Eye,
   Snowflake,
   X,
   Terminal,
@@ -20,7 +19,10 @@ import {
   Activity,
   AlertTriangle,
 } from "lucide-react";
+
 import DarkSelect from "../components/common/DarkSelect";
+import ActionButton from "../components/common/ActionButton";
+import InfoRow from "../components/common/InfoRow";
 
 const usersMockData = [
   {
@@ -491,23 +493,20 @@ export default function Users() {
 
                       <td className="whitespace-nowrap px-4 py-3.5 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => setSelectedUser(user)}
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-400 transition hover:border-cyan-500/30 hover:text-cyan-300"
-                          >
-                            <Eye className="h-3 w-3" />
-                            Inspect
-                          </button>
+                          <ActionButton
+  onClick={() => setSelectedUser(user)}
+  label="Inspect"
+  cyan
+/>
 
-                          <button
-                            onClick={() =>
-                              alert(`Freeze sequence initiated for ${user.id}`)
-                            }
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-500 transition hover:border-rose-500/30 hover:text-rose-300"
-                          >
-                            <Snowflake className="h-3 w-3" />
-                            Freeze
-                          </button>
+                          <ActionButton
+  onClick={() =>
+    alert(`Freeze sequence initiated for ${user.id}`)
+  }
+  label="Freeze"
+  red
+  icon={<Snowflake className="h-3 w-3" />}
+/>
                         </div>
                       </td>
                     </tr>
@@ -703,20 +702,5 @@ export default function Users() {
         )}
       </AnimatePresence>
     </motion.div>
-  );
-}
-
-function InfoRow({ label, value, cyan = false }) {
-  return (
-    <div className="flex items-start justify-between gap-4">
-      <span className="shrink-0 text-slate-600">{label}:</span>
-      <span
-        className={`text-right font-medium ${
-          cyan ? "text-cyan-300" : "text-slate-300"
-        }`}
-      >
-        {value}
-      </span>
-    </div>
   );
 }

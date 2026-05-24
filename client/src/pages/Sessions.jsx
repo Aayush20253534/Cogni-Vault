@@ -15,9 +15,10 @@ import {
   User,
   Cpu,
   Terminal,
-  Eye,
 } from "lucide-react";
 import DarkSelect from "../components/common/DarkSelect";
+import ActionButton from "../components/common/ActionButton";
+import InfoRow from "../components/common/InfoRow";
 
 
 const sessionMockData = [
@@ -620,27 +621,6 @@ export default function Sessions() {
   );
 }
 
-
-function ActionButton({ label, onClick, cyan, amber, red }) {
-  const color = cyan
-    ? "hover:border-cyan-500/30 hover:text-cyan-300"
-    : amber
-    ? "text-amber-300 border-amber-500/20 bg-amber-500/10"
-    : red
-    ? "text-rose-300 border-rose-500/20 bg-rose-500/10"
-    : "";
-
-  return (
-    <button
-      onClick={onClick}
-      className={`inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-400 transition ${color}`}
-    >
-      {cyan && <Eye className="h-3 w-3" />}
-      {label}
-    </button>
-  );
-}
-
 function DrawerHeader({ session }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/30 p-4">
@@ -710,17 +690,6 @@ function InfoPanel({ title, children, rose = false }) {
         {title}
       </div>
       <p className="text-[11px] leading-relaxed text-slate-400">{children}</p>
-    </div>
-  );
-}
-
-function InfoRow({ label, value, cyan = false }) {
-  return (
-    <div className="mt-2 flex items-start justify-between gap-4 text-[10px]">
-      <span className="shrink-0 text-slate-600">{label}:</span>
-      <span className={`text-right font-medium ${cyan ? "text-cyan-300" : "text-slate-300"}`}>
-        {value}
-      </span>
     </div>
   );
 }

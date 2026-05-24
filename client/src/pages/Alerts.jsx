@@ -15,9 +15,9 @@ import {
   Zap,
   Radio,
   FileSpreadsheet,
-  Eye,
 } from "lucide-react";
 import DarkSelect from "../components/common/DarkSelect";
+import ActionButton from "../components/common/ActionButton";
 
 const initialAlerts = [
   {
@@ -525,27 +525,6 @@ export default function Alerts() {
         )}
       </AnimatePresence>
     </motion.div>
-  );
-}
-
-
-function ActionButton({ label, onClick, cyan, green, red, icon }) {
-  const color = cyan
-    ? "hover:border-cyan-500/30 hover:text-cyan-300"
-    : green
-    ? "text-emerald-300 border-emerald-500/20 bg-emerald-500/10"
-    : red
-    ? "text-rose-300 border-rose-500/20 bg-rose-500/10"
-    : "";
-
-  return (
-    <button
-      onClick={onClick}
-      className={`inline-flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-400 transition ${color}`}
-    >
-      {icon && <Eye className="h-3 w-3" />}
-      {label}
-    </button>
   );
 }
 

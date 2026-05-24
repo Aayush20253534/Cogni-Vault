@@ -20,6 +20,8 @@ import {
   Activity,
 } from "lucide-react";
 import DarkSelect from "../components/common/DarkSelect";
+import IconButton from "../components/common/IconButton";
+import InfoPanel from "../components/common/InfoPanel";
 
 const initialReports = [
   {
@@ -536,27 +538,6 @@ export default function Reports() {
 }
 
 
-
-function IconButton({ icon: Icon, onClick, cyan, green, purple, disabled }) {
-  const color = cyan
-    ? "hover:text-cyan-300 hover:border-cyan-500/30"
-    : green
-    ? "hover:text-emerald-300 hover:border-emerald-500/30"
-    : purple
-    ? "hover:text-purple-300 hover:border-purple-500/30"
-    : "";
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`rounded-lg border border-slate-800 bg-slate-900 p-1.5 text-slate-400 transition disabled:cursor-not-allowed disabled:text-slate-700 ${color}`}
-    >
-      <Icon className="h-3.5 w-3.5" />
-    </button>
-  );
-}
-
 function MiniBox({ label, value, danger }) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
@@ -570,20 +551,4 @@ function MiniBox({ label, value, danger }) {
   );
 }
 
-function InfoPanel({ title, icon: Icon, color, children }) {
-  const cls =
-    color === "rose"
-      ? "border-rose-500/10 bg-rose-500/10 text-rose-300"
-      : "border-cyan-500/10 bg-cyan-500/10 text-cyan-300";
-
-  return (
-    <div className={`rounded-xl border p-3.5 ${cls}`}>
-      <div className="mb-1.5 flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest">
-        <Icon className="h-3.5 w-3.5" />
-        {title}
-      </div>
-      <p className="text-[11px] leading-relaxed text-slate-400">{children}</p>
-    </div>
-  );
-}
 
