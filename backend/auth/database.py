@@ -4,7 +4,7 @@ from typing import Generator
 
 # SQLite for development; swap the URL for PostgreSQL/MySQL in production:
 #   postgresql+psycopg2://user:pass@host/dbname
-DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = "sqlite:///./data/app.db"
 
 engine = create_engine(
     DATABASE_URL,

@@ -2,11 +2,13 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 
 from auth.database import engine
 from auth.models import Base
 from auth.router import router as auth_router
-
+from chatbot.router import router as chatbot_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -22,8 +24,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # tighten in prod
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth_router)
+app.include_router(chatbot_router)
 
 
 # ── Health check ──────────────────────────────────────────────────────────────

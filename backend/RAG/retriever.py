@@ -31,7 +31,7 @@ class HybridRetriever:
         self,
         use_sparse: bool = True,
         use_dense: bool = True,
-        use_reranker:bool = True,              # plug in your reranker here later
+        use_reranker:bool = False,              # plug in your reranker here later
         sparse_k: int = 10,
         dense_k: int = 10,
     ):
