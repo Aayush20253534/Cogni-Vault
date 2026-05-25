@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_MODEL = "llama3-70b-8192"
+DEFAULT_MODEL = "openai/gpt-oss-120b"
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_MAX_TOKENS = 1024
 

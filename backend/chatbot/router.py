@@ -21,7 +21,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import StreamingResponse
 
-from auth.dependencies import get_current_user  
+from auth.dependencies import get_current_user  # type: ignore[import]
 from chatbot import service
 from chatbot.schemas import (
     ChatRequest,
@@ -43,16 +43,21 @@ CurrentUser = Annotated[dict, Depends(get_current_user)]
 # ---------------------------------------------------------------------------
 
 
-def _user_id(current_user: dict) -> str:
+def _user_id(current_user) -> str:
     """
-    Extract a stable string identifier from the JWT payload dict.
+    Extract a stable string identifier from the current_user object.
 
-    Tries common claim names in order: ``sub``, ``id``, ``user_id``, ``email``.
-    Falls back to the string representation of the full payload.
+    Supports both SQLAlchemy model instances (attribute access) and plain
+    dicts (key access). Tries common field names: id, user_id, sub, email.
     """
-    for key in ("sub", "id", "user_id", "email"):
-        if key in current_user:
-            return str(current_user[key])
+    for attr in ("id", "user_id", "sub", "email"):
+        # Attribute access — SQLAlchemy User model instance
+        val = getattr(current_user, attr, None)
+        if val is not None:
+            return str(val)
+        # Dict access — plain JWT payload dict
+        if isinstance(current_user, dict) and attr in current_user:
+            return str(current_user[attr])
     return str(current_user)
 
 

@@ -28,10 +28,9 @@ from langchain_core.messages import BaseMessage
 from chatbot import memory as mem
 from chatbot.llm import chat, chat_stream
 from chatbot.prompts import build_chat_prompt, format_retrieved_context
-from chatbot.schemas import ChatResponse, HistoryResponse, MessageRecord
+from chatbot.schemas import ChatResponse, HistoryResponse, MessageRecord 
 
-# RAG import — not modified, only used
-from RAG.knowledge_rag import KnowledgeRAG  # type: ignore[import]
+from RAG.rag import KnowledgeRAG  # type: ignore[import]
 
 logger = logging.getLogger(__name__)
 
